@@ -3,6 +3,8 @@
 
 ## Installation
 
+git clone https://github.com/Levivig/LZWBinaryTree.git <br />
+cd LZWBinaryTree <br />
 make
 
 ## Usage
