@@ -8,8 +8,8 @@ make
 ## Usage
 
 ./lzw input kilobytes -o output [-tree] <br />
-kilobytes: -1 means the whole file <br />
--tree: print tree into output
+	kilobytes: -1 means the whole file <br />
+	-tree: print tree into output
 
 ## Contributors
 

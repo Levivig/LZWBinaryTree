@@ -32,7 +32,7 @@ public:
 	LZWBinaryTree (const LZWBinaryTree &);
 	LZWBinaryTree & operator= (const LZWBinaryTree &);
 	LZWBinaryTree & operator<< (char b);
-	
+
 	void write();
 	void write(std::ostream & outfile);
 

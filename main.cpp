@@ -32,12 +32,13 @@ void usage();
 int main (int argc, char *argv[])
 {
 	bool print_tree = false;
-	if (argc < 5)
+	
+	if (argc < 6)
 	{
 		usage ();
 		return -1;
 	}
-	else if (argc == 6)
+	else if (argc == 7)
 		print_tree = true;
 
 	std::fstream inFile (argv[1], std::ios_base::in);
