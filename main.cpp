@@ -123,6 +123,8 @@ int main (int argc, char *argv[])
 	outFile.close ();
 	inFile.close ();
 
+	std::cout << "kimeneti file 4. karaktere: " << argv[4][3] << std::endl;
+
 	return 0;
 }
 
