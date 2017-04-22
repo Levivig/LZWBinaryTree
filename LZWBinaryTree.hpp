@@ -27,10 +27,10 @@
 class LZWBinaryTree
 {
 public:
-	LZWBinaryTree();
-	~LZWBinaryTree();
-	LZWBinaryTree (const LZWBinaryTree &);
-	LZWBinaryTree & operator= (const LZWBinaryTree &);
+	LZWBinaryTree();	//konstruktor
+	~LZWBinaryTree();	//destruktor
+	//LZWBinaryTree (const LZWBinaryTree &);	//másoló konstruktor
+	//LZWBinaryTree & operator= (const LZWBinaryTree &);	//másoló értékadás operátor (a.k.a egyenlőségjel)
 	LZWBinaryTree & operator<< (char b);
 
 	void write();
@@ -46,8 +46,10 @@ private:
 	class Node
 	{
 	public:
-		Node(char const b = '/');
-		~Node();
+		Node(char const b = '/');	//konstruktor
+		~Node();	//destruktor
+//		Node(Node const &);	//másoló konstruktor
+//		Node & operator=(Node const &);	//másoló értékadás operátor (a.k.a egyenlőségjel)
 
 		char getLetter() const;
 		Node *nullChild() const;
@@ -60,8 +62,7 @@ private:
 		char letter;
 		Node *leftNull;
 		Node *rightOne;
-//		Node(Node const &);
-//		Node & operator=(Node const &);
+
 	};
 
 	Node *bTree;

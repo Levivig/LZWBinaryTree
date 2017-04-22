@@ -23,8 +23,8 @@
 
 #include <iostream>
 #include <fstream>
-#include <string>
-#include <limits>
+#include <string>	//stol maitt
+#include <limits>	//bytes_limit miatt
 #include "LZWBinaryTree.cpp"
 
 void usage();
@@ -33,28 +33,34 @@ int main (int argc, char *argv[])
 {
 	bool print_tree = false;
 	
-	if (argc < 6)
+	if (argc < 5)
 	{
+	//ha nincs megfelelő számú argumentum
+	//szólunk a usernek erről
 		usage ();
 		return -1;
 	}
-	else if (argc == 7)
-		print_tree = true;
+	else if (argc == 6)
+		print_tree = true;	
 
-	std::fstream inFile (argv[1], std::ios_base::in);
+	std::fstream inFile (argv[1], std::ios_base::in);	
 
-	if (!inFile)
+	if (!inFile)	
 	{
+	//infile nem létezik
 		std::cout << argv[1] << " does not exist.." << std::endl;
 		usage ();
 		return -3;
 	}
 
-	long long int bytes_limit = std::stol(argv[2]);
-	bytes_limit *= 1024 ; // kilobytes -> bytes
+
+	//a user megadhatja,hogy mennyit dolgozzunk fel
+	//a bemeneti fileból
+	long long int bytes_limit = std::stol(argv[2]);	//string to long int
+	bytes_limit *= 1024; // kilobytes -> bytes
 
 	if (bytes_limit < 0)
-		bytes_limit = std::numeric_limits<long long int>::max();
+		bytes_limit = std::numeric_limits<long long int>::max();	//#include <limits>
 
 	if (argv[3][1] != 'o')
 	{
@@ -72,26 +78,33 @@ int main (int argc, char *argv[])
 	
 	while (inFile.read ((char *) &b, sizeof (unsigned char)) && (bytes_read++ < bytes_limit))
 	{
+		//'>' karakterrel kezdődő sor komment, ígyazt figyelmen kívül hagyjuk
 		if (b == '>')
 		{
 			comment = true;
 			continue;
 		}
 
+		//ha új sor kezdődik, az már nem komment
 		if (b == 0x0a) //new line
 		{
 			comment = false;
-			continue;
+			continue;	//valamint, az újsor karaktereket sem dolgozzuk fel
 		}
 
 		if (comment)
 			continue;
 
+		//az N betűket sem dolgozzuk fel
 		if (b == 'N')
 			continue;
 
+
 		for (int i = 0; i < 8; ++i)
 		{
+			//minden bit 1 vagy 0 (char) lesz
+			//a konvertálást bit maszkolás és shiftelés segítségével végezzük
+			//a maszkot így shifteljük 1000_0000 -> 0100_0000
 			if (b & 0x80)
 				binTree << '1';
 			else
@@ -106,7 +119,6 @@ int main (int argc, char *argv[])
 	outFile << "depth = " << binTree.getDepth () << std::endl;
 	outFile << "mean = " << binTree.getMean () << std::endl;
 	outFile << "var = " << binTree.getVar () << std::endl;
-
 
 	outFile.close ();
 	inFile.close ();
