@@ -27,6 +27,8 @@
 
 #include <iostream>
 #include <cmath>
+#include <vector>
+#include <bitset>
 #include "LZWBinaryTree.hpp"
 
 //-----------------------------------------------Binfa Public------------------------------------------------//
@@ -41,8 +43,56 @@ LZWBinaryTree::~LZWBinaryTree()	//deconstructor
 	free(root.oneChild());
 	free(root.nullChild());
 }
+LZWBinaryTree::LZWBinaryTree (const LZWBinaryTree& tree)
+{
 
-LZWBinaryTree & LZWBinaryTree::operator<< (char b)
+	root.createOneChild ( copy(tree.root.oneChild()) );  
+	root.createNullChild ( copy(tree.root.nullChild()) );
+}
+
+LZWBinaryTree & LZWBinaryTree::operator<< (std::vector<int> & binTreeVector)
+{
+	int b;
+
+	for (int i = 0; i < binTreeVector.size(); ++i)
+	{
+		b = binTreeVector.at(i);
+
+		if (b == 0)
+		{
+			if (bTree->nullChild() == nullptr)
+			{
+				Node *newChild = new Node('0');
+				bTree->createNullChild(newChild);
+				bTree = &root;
+			}
+
+			else
+			{
+				bTree = bTree->nullChild();
+			}
+		}
+
+		else	//b == 1
+		{
+			if (bTree->oneChild() == nullptr)
+			{
+				Node *newChild = new Node('1');
+				bTree->createOneChild(newChild);
+				bTree = &root;
+			}
+
+			else
+			{
+				bTree = bTree->oneChild();
+			}
+		}
+	}
+
+	return (*this);
+}
+
+LZWBinaryTree& LZWBinaryTree::operator<< (char b)
 {
 	if (b == '0')
 	{
@@ -130,6 +180,21 @@ void LZWBinaryTree::write(std::ostream& outfile)
 {
 	depth = 0;
 	write(&root, outfile);
+}
+
+LZWBinaryTree::Node* LZWBinaryTree::copy(Node* element)
+{
+	Node* newptr = nullptr;
+
+	if (element != nullptr)
+	{
+		newptr = new Node(element->getLetter() );
+
+		newptr->createNullChild( copy( element->nullChild() ) );
+		newptr->createOneChild( copy( element->oneChild() ) );
+	}
+
+	return newptr;
 }
 
 //-----------------------------------------------Node Public------------------------------------------------//

@@ -25,6 +25,7 @@
 #include <fstream>
 #include <string>	//stol maitt
 #include <limits>	//bytes_limit miatt
+#include <vector>
 #include "LZWBinaryTree.cpp"
 
 void usage();
@@ -75,6 +76,8 @@ int main (int argc, char *argv[])
 	LZWBinaryTree binTree;
 
 	bool comment = false;
+
+	std::vector<int> binTreeVector;
 	
 	while (inFile.read ((char *) &b, sizeof (unsigned char)) && (bytes_read++ < bytes_limit))
 	{
@@ -106,24 +109,29 @@ int main (int argc, char *argv[])
 			//a konvertálást bit maszkolás és shiftelés segítségével végezzük
 			//a maszkot így shifteljük 1000_0000 -> 0100_0000
 			if (b & 0x80)
-				binTree << '1';
+				binTreeVector.push_back(1);
 			else
-				binTree << '0';
+				binTreeVector.push_back(0);
 			b <<= 1;
 		}
 	}
 
+
+	binTree << binTreeVector;
+
+	LZWBinaryTree binTree2(binTree);
+
 	if(print_tree)
-		outFile << binTree;
+		std::cout << binTree;
 
 	outFile << "depth = " << binTree.getDepth () << std::endl;
 	outFile << "mean = " << binTree.getMean () << std::endl;
 	outFile << "var = " << binTree.getVar () << std::endl;
 
+
 	outFile.close ();
 	inFile.close ();
 
-	std::cout << "kimeneti file 4. karaktere: " << argv[4][3] << std::endl;
 
 	return 0;
 }
