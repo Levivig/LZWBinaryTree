@@ -30,6 +30,7 @@ public:
 	LZWBinaryTree();	//konstruktor
 	~LZWBinaryTree();	//destruktor
 	LZWBinaryTree (const LZWBinaryTree &tree);	//másoló konstruktor
+	LZWBinaryTree & operator= (const LZWBinaryTree &tree);	//másoló értékadás operátor (a.k.a egyenlőségjel)
 
 	LZWBinaryTree & operator<< (std::vector<int> & binTreeVector);
 	LZWBinaryTree & operator<< (char b);
@@ -68,9 +69,6 @@ private:
 	};
 
 	Node* copy(Node* element);
-
-	
-	//LZWBinaryTree & operator= (const LZWBinaryTree &);	//másoló értékadás operátor (a.k.a egyenlőségjel)
 
 	Node *bTree;
 	int depth, meanSum, meanPc;

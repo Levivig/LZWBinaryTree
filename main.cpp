@@ -119,14 +119,22 @@ int main (int argc, char *argv[])
 
 	binTree << binTreeVector;
 
-	LZWBinaryTree binTree2(binTree);
+	LZWBinaryTree binTree2;
 
-	if(print_tree)
-		std::cout << binTree;
+	binTree2 = binTree;
+
+//	if(print_tree)
+		outFile << binTree;
 
 	outFile << "depth = " << binTree.getDepth () << std::endl;
 	outFile << "mean = " << binTree.getMean () << std::endl;
-	outFile << "var = " << binTree.getVar () << std::endl;
+	outFile << "var = " << binTree.getVar () << std::endl << std::endl << std::endl;
+
+	outFile << binTree2;
+
+	outFile << "depth = " << binTree2.getDepth () << std::endl;
+	outFile << "mean = " << binTree2.getMean () << std::endl;
+	outFile << "var = " << binTree2.getVar () << std::endl;
 
 
 	outFile.close ();

@@ -45,7 +45,6 @@ LZWBinaryTree::~LZWBinaryTree()	//deconstructor
 }
 LZWBinaryTree::LZWBinaryTree (const LZWBinaryTree& tree)
 {
-
 	root.createOneChild ( copy(tree.root.oneChild()) );  
 	root.createNullChild ( copy(tree.root.nullChild()) );
 }
@@ -125,6 +124,14 @@ LZWBinaryTree& LZWBinaryTree::operator<< (char b)
 	}
 
 	return (*this); 
+}
+
+LZWBinaryTree & LZWBinaryTree::operator= (const LZWBinaryTree &tree)
+{
+	root.createOneChild ( copy(tree.root.oneChild()) );  
+	root.createNullChild ( copy(tree.root.nullChild()) );
+
+	return (*this);
 }
 
 void LZWBinaryTree::write(void)
