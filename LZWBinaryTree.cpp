@@ -43,9 +43,12 @@ LZWBinaryTree::~LZWBinaryTree()	//deconstructor
 	free(root.oneChild());
 	free(root.nullChild());
 }
-LZWBinaryTree::LZWBinaryTree (const LZWBinaryTree& tree)
+LZWBinaryTree::LZWBinaryTree (const LZWBinaryTree& tree)	//másoló konstruktor
 {
-	root.createOneChild ( copy(tree.root.oneChild(), tree.bTree) );  
+	//copy függvény végzi a mélymásolást, 233.sorban található
+	//átadjuk neki a bal és jobboldali gyermekeket (külön-külön), illetve a fa mutatót ahol éppen áll
+
+	root.createOneChild ( copy(tree.root.oneChild(), tree.bTree) );
 	root.createNullChild ( copy(tree.root.nullChild(), tree.bTree) );
 }
 
@@ -229,17 +232,21 @@ void LZWBinaryTree::write(std::ostream& outfile)
 
 LZWBinaryTree::Node* LZWBinaryTree::copy(Node* element, Node* old_tree)
 {
-	Node* newptr = nullptr;
+	Node* newptr = nullptr;	//segédváltozó, az új elemre fog mutatni, ez lesz a visszatési érték
 
-	if (element != nullptr)
+	if (element != nullptr)	//rekurzió miatt, ha már nincs több elem, nem megyünk tovább
 	{
-		newptr = new Node(element->getLetter() );
+		newptr = new Node(element->getLetter() );	//a paraméterként kapott elem betűjével létrehozunk egy új csomópontot
 
+		//rekurzív hívás, az adott elem mindkét részfáját feldolgozzuk ugyanilyen módon
 		newptr->createNullChild( copy( element->nullChild(), old_tree ) );
 		newptr->createOneChild( copy( element->oneChild(), old_tree ) );
 
+		//ha az elem ahol járunk az eredeti fának a "fa" mutatójával egyenló, akkor az újban is arra állítjuk
+		//azért van rá szükség, mert ha további elemeket szúrunk be az új fánkba, akkor alapból nem tudjuk, hogy annak
+		// a fa mutatója hova mutat
 		if(old_tree == element)
-			bTree = newptr;
+			bTree = newptr;	//az új fa fa mutatója lesz az éppen feldolgozott elem
 	}
 
 	return newptr;
