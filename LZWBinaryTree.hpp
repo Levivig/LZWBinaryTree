@@ -68,7 +68,7 @@ private:
 
 	};
 
-	Node* copy(Node* element);
+	Node* copy(Node* , Node*);
 
 	Node *bTree;
 	int depth, meanSum, meanPc;

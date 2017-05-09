@@ -45,8 +45,8 @@ LZWBinaryTree::~LZWBinaryTree()	//deconstructor
 }
 LZWBinaryTree::LZWBinaryTree (const LZWBinaryTree& tree)
 {
-	root.createOneChild ( copy(tree.root.oneChild()) );  
-	root.createNullChild ( copy(tree.root.nullChild()) );
+	root.createOneChild ( copy(tree.root.oneChild(), tree.bTree) );  
+	root.createNullChild ( copy(tree.root.nullChild(), tree.bTree) );
 }
 
 LZWBinaryTree & LZWBinaryTree::operator<< (std::vector<int> & binTreeVector)
@@ -126,10 +126,48 @@ LZWBinaryTree& LZWBinaryTree::operator<< (char b)
 	return (*this); 
 }
 
+/*
+LZWBinaryTree& LZWBinaryTree::operator<< (fstream& inFile)
+{
+	if (b == '0')
+	{
+		if (bTree->nullChild() == nullptr)
+		{
+			Node *newChild = new Node('0');
+			bTree->createNullChild(newChild);
+			bTree = &root;
+		}
+
+		else
+		{
+			bTree = bTree->nullChild();
+		}
+	}
+
+	else	//b == 1
+	{
+		if (bTree->oneChild() == nullptr)
+		{
+			Node *newChild = new Node('1');
+			bTree->createOneChild(newChild);
+			bTree = &root;
+		}
+
+		else
+		{
+			bTree = bTree->oneChild();
+		}
+	}
+
+	return (*this); 
+}
+*/
+
 LZWBinaryTree & LZWBinaryTree::operator= (const LZWBinaryTree &tree)
 {
-	root.createOneChild ( copy(tree.root.oneChild()) );  
-	root.createNullChild ( copy(tree.root.nullChild()) );
+
+	root.createOneChild ( copy(tree.root.oneChild(), tree.bTree ) );  
+	root.createNullChild ( copy(tree.root.nullChild(), tree.bTree ) );
 
 	return (*this);
 }
@@ -189,7 +227,7 @@ void LZWBinaryTree::write(std::ostream& outfile)
 	write(&root, outfile);
 }
 
-LZWBinaryTree::Node* LZWBinaryTree::copy(Node* element)
+LZWBinaryTree::Node* LZWBinaryTree::copy(Node* element, Node* old_tree)
 {
 	Node* newptr = nullptr;
 
@@ -197,8 +235,11 @@ LZWBinaryTree::Node* LZWBinaryTree::copy(Node* element)
 	{
 		newptr = new Node(element->getLetter() );
 
-		newptr->createNullChild( copy( element->nullChild() ) );
-		newptr->createOneChild( copy( element->oneChild() ) );
+		newptr->createNullChild( copy( element->nullChild(), old_tree ) );
+		newptr->createOneChild( copy( element->oneChild(), old_tree ) );
+
+		if(old_tree == element)
+			bTree = newptr;
 	}
 
 	return newptr;

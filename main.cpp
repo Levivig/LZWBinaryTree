@@ -32,7 +32,7 @@ void usage();
 
 int main (int argc, char *argv[])
 {
-	bool print_tree = false;
+/*	bool print_tree = false;
 	
 	if (argc < 5)
 	{
@@ -116,29 +116,35 @@ int main (int argc, char *argv[])
 		}
 	}
 
+*/
 
-	binTree << binTreeVector;
+	LZWBinaryTree binTree;
 
-	LZWBinaryTree binTree2;
+	binTree << '1' << '0'<< '1'<<'0' << '1';
 
-	binTree2 = binTree;
+	LZWBinaryTree binTree2(binTree);
+
+	binTree2 << '1' << '1' << '1';
+
+	binTree << '1' << '1' << '1';
 
 //	if(print_tree)
-		outFile << binTree;
+		std::cout << binTree;
 
-	outFile << "depth = " << binTree.getDepth () << std::endl;
-	outFile << "mean = " << binTree.getMean () << std::endl;
-	outFile << "var = " << binTree.getVar () << std::endl << std::endl << std::endl;
+	std::cout << "depth = " << binTree.getDepth () << std::endl;
+	std::cout << "mean = " << binTree.getMean () << std::endl;
+	std::cout << "var = " << binTree.getVar () << std::endl << std::endl;
 
-	outFile << binTree2;
+//	if(print_tree)
+		std::cout << binTree2;
 
-	outFile << "depth = " << binTree2.getDepth () << std::endl;
-	outFile << "mean = " << binTree2.getMean () << std::endl;
-	outFile << "var = " << binTree2.getVar () << std::endl;
+	std::cout << "depth = " << binTree2.getDepth () << std::endl;
+	std::cout << "mean = " << binTree2.getMean () << std::endl;
+	std::cout << "var = " << binTree2.getVar () << std::endl;
 
 
-	outFile.close ();
-	inFile.close ();
+//	outFile.close ();
+//	inFile.close ();
 
 
 	return 0;
