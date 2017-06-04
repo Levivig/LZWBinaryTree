@@ -175,7 +175,6 @@ LZWBinaryTree& LZWBinaryTree::operator<< (std::fstream& inFile)
 		if (b == 'N')
 			continue;
 
-
 		for (int i = 0; i < 8; ++i)
 		{
 			//minden bit 1 vagy 0 (char) lesz
