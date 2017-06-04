@@ -25,12 +25,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <iostream>
 #include <iosfwd>
 #include <fstream>
 #include <cmath>
 #include <vector>
-#include <bitset>
 #include "LZWBinaryTree.hpp"
 
 //-----------------------------------------------Binfa Public------------------------------------------------//
@@ -75,7 +73,7 @@ LZWBinaryTree & LZWBinaryTree::operator<< (std::vector<int> & binTreeVector)
 {
 	int b;
 
-	for (int i = 0; i < binTreeVector.size(); ++i)
+	for (unsigned int i = 0; i < binTreeVector.size(); ++i)
 	{
 		b = binTreeVector.at(i);
 

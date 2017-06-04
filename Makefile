@@ -1,7 +1,7 @@
 build:
 
 	@echo "Compiling code.."
-	@g++ main.cpp -o lzw -std=c++11 -Wall
+	@g++ -O3 -std=c++11 main.cpp -o lzw -Wall
 	@echo "Done!"
 clean:
 	@echo "Removing.."
