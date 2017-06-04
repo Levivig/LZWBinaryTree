@@ -26,6 +26,8 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <iostream>
+#include <iosfwd>
+#include <fstream>
 #include <cmath>
 #include <vector>
 #include <bitset>
@@ -35,11 +37,12 @@
 
 LZWBinaryTree::LZWBinaryTree()		//constructor
 {
-//	std::cout << "Binary tree constructor" << std::endl;
+//	std::cout << "Binary tree constructor: " << this << std::endl;
 	bTree = &root;
 }
-LZWBinaryTree::~LZWBinaryTree()	//deconstructor
+LZWBinaryTree::~LZWBinaryTree()	//destructor
 {
+//	std::cout << "Binary tree destructor: " << this << std::endl;
 	free(root.oneChild());
 	free(root.nullChild());
 }
@@ -48,9 +51,25 @@ LZWBinaryTree::LZWBinaryTree (const LZWBinaryTree& tree)	//másoló konstruktor
 	//copy függvény végzi a mélymásolást, 233.sorban található
 	//átadjuk neki a bal és jobboldali gyermekeket (külön-külön), illetve a fa mutatót ahol éppen áll
 
+//	std::cout <<"Binary tree copy constructor: " << this << std::endl;
+
 	root.createOneChild ( copy(tree.root.oneChild(), tree.bTree) );
 	root.createNullChild ( copy(tree.root.nullChild(), tree.bTree) );
 }
+
+LZWBinaryTree & LZWBinaryTree::operator= (const LZWBinaryTree &tree)
+{
+//	std::cout << "Binary tree = operator" << std::endl;
+
+	if(this == &tree)
+		return *this;
+
+	root.createOneChild ( copy(tree.root.oneChild(), tree.bTree ) );  
+	root.createNullChild ( copy(tree.root.nullChild(), tree.bTree ) );
+
+	return (*this);
+}
+
 
 LZWBinaryTree & LZWBinaryTree::operator<< (std::vector<int> & binTreeVector)
 {
@@ -129,50 +148,74 @@ LZWBinaryTree& LZWBinaryTree::operator<< (char b)
 	return (*this); 
 }
 
-/*
-LZWBinaryTree& LZWBinaryTree::operator<< (fstream& inFile)
+
+LZWBinaryTree& LZWBinaryTree::operator<< (std::fstream& inFile)
 {
-	if (b == '0')
+	unsigned char b;
+	bool comment = false;
+
+	while (inFile.read ((char *) &b, sizeof (unsigned char)))
 	{
-		if (bTree->nullChild() == nullptr)
+		//'>' karakterrel kezdődő sor komment, ígyazt figyelmen kívül hagyjuk
+		if (b == '>')
 		{
-			Node *newChild = new Node('0');
-			bTree->createNullChild(newChild);
-			bTree = &root;
+			comment = true;
+			continue;
 		}
 
-		else
+		//ha új sor kezdődik, az már nem komment
+		if (b == 0x0a) //new line
 		{
-			bTree = bTree->nullChild();
+			comment = false;
+			continue;	//valamint, az újsor karaktereket sem dolgozzuk fel
+		}
+
+		if (comment)
+			continue;
+
+		//az N betűket sem dolgozzuk fel
+		if (b == 'N')
+			continue;
+
+
+		for (int i = 0; i < 8; ++i)
+		{
+			//minden bit 1 vagy 0 (char) lesz
+			//a konvertálást bit maszkolás és shiftelés segítségével végezzük
+			//a maszkot így shifteljük 1000_0000 -> 0100_0000
+			if (b & 0x80)	//1
+			{
+				if (bTree->oneChild() == nullptr)
+				{
+					Node *newChild = new Node('1');
+					bTree->createOneChild(newChild);
+					bTree = &root;
+				}
+
+				else
+				{
+					bTree = bTree->oneChild();
+				}
+			}
+			else	//0
+			{
+				if (bTree->nullChild() == nullptr)
+				{
+					Node *newChild = new Node('0');
+					bTree->createNullChild(newChild);
+					bTree = &root;
+				}
+
+				else
+				{
+					bTree = bTree->nullChild();
+				}
+			}
+
+			b <<= 1;
 		}
 	}
-
-	else	//b == 1
-	{
-		if (bTree->oneChild() == nullptr)
-		{
-			Node *newChild = new Node('1');
-			bTree->createOneChild(newChild);
-			bTree = &root;
-		}
-
-		else
-		{
-			bTree = bTree->oneChild();
-		}
-	}
-
 	return (*this); 
-}
-*/
-
-LZWBinaryTree & LZWBinaryTree::operator= (const LZWBinaryTree &tree)
-{
-
-	root.createOneChild ( copy(tree.root.oneChild(), tree.bTree ) );  
-	root.createNullChild ( copy(tree.root.nullChild(), tree.bTree ) );
-
-	return (*this);
 }
 
 void LZWBinaryTree::write(void)
@@ -256,13 +299,14 @@ LZWBinaryTree::Node* LZWBinaryTree::copy(Node* element, Node* old_tree)
 
 LZWBinaryTree::Node::Node(char b)
 {
-//	std::cout << "Node constructor" << std::endl;
+//	std::cout << "Node constructor: " << this << std::endl;
 	letter = b;
 	leftNull = nullptr;
 	rightOne = nullptr;
 }
 LZWBinaryTree::Node::~Node()
 {
+//	std::cout << "Node destructor: " << this << std::endl;
 }
 
 char LZWBinaryTree::Node::getLetter() const

@@ -34,6 +34,7 @@ public:
 
 	LZWBinaryTree & operator<< (std::vector<int> & binTreeVector);
 	LZWBinaryTree & operator<< (char b);
+	LZWBinaryTree& operator<< (std::fstream& inFile);
 
 	void write();
 	void write(std::ostream & outfile);
