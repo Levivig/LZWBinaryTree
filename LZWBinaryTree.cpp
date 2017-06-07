@@ -53,9 +53,12 @@ LZWBinaryTree::LZWBinaryTree (const LZWBinaryTree& tree)	//másoló konstruktor
 
 	root.createOneChild ( copy(tree.root.oneChild(), tree.bTree) );
 	root.createNullChild ( copy(tree.root.nullChild(), tree.bTree) );
+
+	if(tree.bTree == &(tree.root))
+		bTree = &root;
 }
 
-LZWBinaryTree & LZWBinaryTree::operator= (const LZWBinaryTree &tree)
+LZWBinaryTree& LZWBinaryTree::operator= (const LZWBinaryTree& tree)
 {
 //	std::cout << "Binary tree = operator" << std::endl;
 
